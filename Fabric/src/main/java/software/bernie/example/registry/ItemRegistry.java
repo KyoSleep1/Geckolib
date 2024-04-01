@@ -34,15 +34,12 @@ public class ItemRegistry {
     public static final SpawnEggItem FAKE_GLASS_SPAWN_EGG = registerItem("fake_glass_spawn_egg", new SpawnEggItem(EntityRegistry.FAKE_GLASS, 0xDD0000, 0xD8FFF7, new Item.Properties()));
     public static final SpawnEggItem COOL_KID_SPAWN_EGG = registerItem("cool_kid_spawn_egg", new SpawnEggItem(EntityRegistry.COOL_KID, 0x5F2A31, 0x6F363E, new Item.Properties()));
     public static final SpawnEggItem GREMLIN_SPAWN_EGG = registerItem("gremlin_spawn_egg", new SpawnEggItem(EntityRegistry.GREMLIN, 0x505050, 0x606060, new Item.Properties()));
-    
-    public static final CreativeModeTab ITEM_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(GeckoLib.MOD_ID, "geckolib_examples"), FabricItemGroup
-            .builder()
-            .title(Component.translatable("itemGroup.geckolib.geckolib_examples"))
+
+    public static final CreativeModeTab ITEM_GROUP = FabricItemGroup
+            .builder(new ResourceLocation(GeckoLib.MOD_ID, "geckolib_examples"))
             .icon(() -> new ItemStack(ItemRegistry.JACK_IN_THE_BOX))
             .displayItems((enabledFeatures, entries) -> {
                 entries.accept(ItemRegistry.JACK_IN_THE_BOX);
-                entries.accept(ItemRegistry.FERTILIZER);
-                entries.accept(ItemRegistry.GECKO_HABITAT);
                 entries.accept(ItemRegistry.GECKO_ARMOR_HELMET);
                 entries.accept(ItemRegistry.GECKO_ARMOR_CHESTPLATE);
                 entries.accept(ItemRegistry.GECKO_ARMOR_LEGGINGS);
@@ -51,6 +48,8 @@ public class ItemRegistry {
                 entries.accept(ItemRegistry.WOLF_ARMOR_CHESTPLATE);
                 entries.accept(ItemRegistry.WOLF_ARMOR_LEGGINGS);
                 entries.accept(ItemRegistry.WOLF_ARMOR_BOOTS);
+                entries.accept(BlockRegistry.GECKO_HABITAT_BLOCK);
+                entries.accept(BlockRegistry.FERTILIZER_BLOCK);
                 entries.accept(ItemRegistry.BAT_SPAWN_EGG);
                 entries.accept(ItemRegistry.BIKE_SPAWN_EGG);
                 entries.accept(ItemRegistry.RACE_CAR_SPAWN_EGG);
@@ -59,7 +58,7 @@ public class ItemRegistry {
                 entries.accept(ItemRegistry.GREMLIN_SPAWN_EGG);
                 entries.accept(ItemRegistry.FAKE_GLASS_SPAWN_EGG);
                 entries.accept(ItemRegistry.COOL_KID_SPAWN_EGG);
-            }).build());
+            }).build();
 
     public static <I extends Item> I registerItem(String name, I item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(GeckoLib.MOD_ID, name), item);

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
 import software.bernie.example.block.entity.FertilizerBlockEntity;
 import software.bernie.example.client.renderer.block.FertilizerBlockRenderer;
 import software.bernie.example.registry.BlockEntityRegistry;
@@ -31,12 +32,7 @@ import java.util.List;
  */
 public class FertilizerBlock extends DirectionalBlock implements EntityBlock {
 	public FertilizerBlock() {
-		super(Properties.of().noOcclusion());
-	}
-
-	@Override
-	protected MapCodec<? extends DirectionalBlock> codec() {
-		return null;
+		super(Properties.of(Material.AIR).noOcclusion());
 	}
 
 	@Nullable

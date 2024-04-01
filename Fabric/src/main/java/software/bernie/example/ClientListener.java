@@ -8,15 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.EntityType;
 import software.bernie.example.client.renderer.block.FertilizerBlockRenderer;
 import software.bernie.example.client.renderer.block.GeckoHabitatBlockRenderer;
-import software.bernie.example.client.renderer.entity.BatRenderer;
-import software.bernie.example.client.renderer.entity.BikeRenderer;
-import software.bernie.example.client.renderer.entity.CoolKidRenderer;
-import software.bernie.example.client.renderer.entity.FakeGlassRenderer;
-import software.bernie.example.client.renderer.entity.GremlinRenderer;
-import software.bernie.example.client.renderer.entity.MutantZombieRenderer;
-import software.bernie.example.client.renderer.entity.ParasiteRenderer;
-import software.bernie.example.client.renderer.entity.RaceCarRenderer;
-import software.bernie.example.client.renderer.entity.ReplacedCreeperRenderer;
+import software.bernie.example.client.renderer.entity.*;
 import software.bernie.example.registry.BlockEntityRegistry;
 import software.bernie.example.registry.BlockRegistry;
 import software.bernie.example.registry.EntityRegistry;
@@ -43,6 +35,7 @@ public final class ClientListener implements ClientModInitializer {
 
 		EntityRendererRegistry.register(EntityRegistry.FAKE_GLASS, FakeGlassRenderer::new);
 		EntityRendererRegistry.register(EntityType.CREEPER, ReplacedCreeperRenderer::new);
+		EntityRendererRegistry.register(EntityType.ZOMBIE, ReplacedZombieRenderer::new);
 
 		BlockEntityRendererRegistry.register(BlockEntityRegistry.GECKO_HABITAT,
 				context -> new GeckoHabitatBlockRenderer());

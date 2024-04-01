@@ -19,7 +19,7 @@ public abstract class TextureManagerMixin {
 
 	@Shadow public abstract void register(ResourceLocation resourceLocation, AbstractTexture abstractTexture);
 
-	@Inject(method = "getTexture(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/AbstractTexture;", at = @At("HEAD"))
+	@Inject(method = "getTexture(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/AbstractTexture;", at = @At("HEAD"), cancellable = true)
 	private void wrapAnimatableTexture(ResourceLocation path, CallbackInfoReturnable<AbstractTexture> callback) {
 		AbstractTexture existing = this.byPath.get(path);
 
@@ -28,5 +28,7 @@ public abstract class TextureManagerMixin {
 
 			register(path, existing);
 		}
+
+		callback.setReturnValue(existing);
 	}
 }

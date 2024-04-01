@@ -24,105 +24,106 @@ import javax.annotation.Nullable;
  * Example {@link GeoAnimatable} implementation of an entity
  */
 public class RaceCarEntity extends Animal implements GeoEntity {
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-	public RaceCarEntity(EntityType<? extends Animal> entityType, Level level) {
-		super(entityType, level);
-	}
+    public RaceCarEntity(EntityType<? extends Animal> entityType, Level level) {
+        super(entityType, level);
+    }
 
-	// Let the player ride the entity
-	@Override
-	public InteractionResult mobInteract(Player player, InteractionHand hand) {
-		if (!this.isVehicle()) {
-			player.startRiding(this);
+    // Let the player ride the entity
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.isVehicle()) {
+            player.startRiding(this);
 
-			return super.mobInteract(player, hand);
-		}
+            return super.mobInteract(player, hand);
+        }
 
-		return super.mobInteract(player, hand);
-	}
+        return super.mobInteract(player, hand);
+    }
 
-	// Turn off step sounds since it's a bike
-	@Override
-	protected void playStepSound(BlockPos pos, BlockState block) {}
+    // Turn off step sounds since it's a bike
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState block) {
+    }
 
-	// Apply player-controlled movement
-	@Override
-	public void travel(Vec3 pos) {
-		if (this.isAlive()) {
-			if (this.isVehicle()) {
-				LivingEntity passenger = (LivingEntity)getControllingPassenger();
-				this.yRotO = getYRot();
-				this.xRotO = getXRot();
+    // Apply player-controlled movement
+    @Override
+    public void travel(Vec3 pos) {
+        if (this.isAlive()) {
+            if (this.isVehicle()) {
+                LivingEntity passenger = (LivingEntity) getControllingPassenger();
+                this.yRotO = getYRot();
+                this.xRotO = getXRot();
 
-				setYRot(passenger.getYRot());
-				setXRot(passenger.getXRot() * 0.5f);
-				setRot(getYRot(), getXRot());
+                setYRot(passenger.getYRot());
+                setXRot(passenger.getXRot() * 0.5f);
+                setRot(getYRot(), getXRot());
 
-				this.yBodyRot = this.getYRot();
-				this.yHeadRot = this.yBodyRot;
-				float x = passenger.xxa * 0.5F;
-				float z = passenger.zza;
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
+                float x = passenger.xxa * 0.5F;
+                float z = passenger.zza;
 
-				if (z <= 0)
-					z *= 0.25f;
+                if (z <= 0)
+                    z *= 0.25f;
 
-				this.setSpeed(0.3f);
-				super.travel(new Vec3(x, pos.y, z));
-			}
-		}
-	}
+                this.setSpeed(0.3f);
+                super.travel(new Vec3(x, pos.y, z));
+            }
+        }
+    }
 
-	// Get the controlling passenger
-	@Nullable
-	@Override
-	public LivingEntity getControllingPassenger() {
-		return getFirstPassenger() instanceof LivingEntity entity ? entity : null;
-	}
+    // Get the controlling passenger
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return getFirstPassenger() instanceof LivingEntity entity ? entity : null;
+    }
 
-	@Override
-	public boolean isControlledByLocalInstance() {
-		return true;
-	}
+    @Override
+    public boolean isControlledByLocalInstance() {
+        return true;
+    }
 
-	// Adjust the rider's position while riding
-	@Override
-	public void positionRider(Entity entity, MoveFunction moveFunction) {
-		if (entity instanceof LivingEntity passenger) {
-			moveFunction.accept(entity, getX(), getY() - 0.1f, getZ());
+    // Adjust the rider's position while riding
 
-			this.xRotO = passenger.xRotO;
-		}
-	}
 
-	// Add our idle/moving animation controller
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "controller", 2, state -> {
-			if (state.isMoving() && getControllingPassenger() != null) {
-				return state.setAndContinue(DefaultAnimations.DRIVE);
-			}
-			else {
-				return state.setAndContinue(DefaultAnimations.IDLE);
-			}
-			// Handle the sound keyframe that is part of our animation json
-		}).setSoundKeyframeHandler(event -> {
-			// We don't have a sound for this yet :(
-		}));
-	}
+    @Override
+    public void positionRider(Entity entity) {
+        if (entity instanceof LivingEntity passenger) {
+            entity.setPos(getX(), getY() - 0.1f, getZ());
+            this.xRotO = passenger.xRotO;
+        }
+    }
 
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    // Add our idle/moving animation controller
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 2, state -> {
+            if (state.isMoving() && getControllingPassenger() != null) {
+                return state.setAndContinue(DefaultAnimations.DRIVE);
+            } else {
+                return state.setAndContinue(DefaultAnimations.IDLE);
+            }
+            // Handle the sound keyframe that is part of our animation json
+        }).setSoundKeyframeHandler(event -> {
+            // We don't have a sound for this yet :(
+        }));
+    }
 
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-		return null;
-	}
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
 
-	@Override
-	protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-		return 0.5F;
-	}
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
+        return null;
+    }
+
+    @Override
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
+        return 0.5F;
+    }
 }

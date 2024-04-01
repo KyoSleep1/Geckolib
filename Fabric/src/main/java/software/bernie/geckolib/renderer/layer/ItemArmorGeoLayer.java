@@ -225,6 +225,7 @@ public class ItemArmorGeoLayer<T extends LivingEntity & GeoAnimatable> extends G
 		return ARMOR_PATH_CACHE.computeIfAbsent(texture, ResourceLocation::new);
 	}
 
+
 	/**
 	 * Render a given {@link AbstractSkullBlock} as a worn armor piece in relation to a given {@link GeoBone}
 	 */
@@ -244,8 +245,8 @@ public class ItemArmorGeoLayer<T extends LivingEntity & GeoAnimatable> extends G
 				if (!skullOwner.isBlank()) {
 					CompoundTag profileTag = new CompoundTag();
 
-					profileTag.putString(PlayerHeadItem.TAG_SKULL_OWNER, skullOwner);
-					SkullBlockEntity.resolveGameProfile(profileTag);
+					SkullBlockEntity.updateGameprofile(new GameProfile(null, skullOwner), name ->
+							stackTag.put(PlayerHeadItem.TAG_SKULL_OWNER, NbtUtils.writeGameProfile(profileTag, name)));
 
 					skullProfile = NbtUtils.readGameProfile(profileTag);
 				}
